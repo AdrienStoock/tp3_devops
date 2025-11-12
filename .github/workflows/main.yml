@@ -27,19 +27,22 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
+          pip install bandit  # ✅ assure que Bandit est installé
 
       - name: Run Bandit security scan with summary
         run: |
+          bandit -r . -f html -o bandit-report.html
           bandit -r . -f txt -o bandit-summary.txt
           echo "=== Bandit Scan Summary ==="
           cat bandit-summary.txt || echo "No issues found"
-        
+
       - name: Upload Bandit report
         uses: actions/upload-artifact@v4
-          with:
-            name: bandit-report
-            path: bandit-report.html
+        with:
+          name: bandit-report
+          path: bandit-report.html
+
+
 
   build-and-push:
     needs: test
