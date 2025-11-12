@@ -13,4 +13,4 @@ EXPOSE 8080
 RUN useradd app
 USER app
 
-CMD ["python3", "app.py", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python3", "app.py", "--host", "localhost", "--port", "8080"]
