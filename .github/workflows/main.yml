@@ -53,11 +53,13 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME=ghcr.io/${github.repository,,}:latest
-          docker build -t $IMAGE_NAME .
+          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}:latest"
+          echo "Building $IMAGE_NAME"
+          docker build -t "$IMAGE_NAME" .
 
       - name: Push Docker image
         run: |
-          IMAGE_NAME=ghcr.io/${github.repository,,}:latest
-          docker push $IMAGE_NAME
+          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}:latest"
+          docker push "$IMAGE_NAME"
+        shell: bash
 
