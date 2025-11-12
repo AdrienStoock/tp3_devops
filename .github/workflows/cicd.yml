@@ -62,8 +62,8 @@ jobs:
         context: .
         push: true
         tags: |
-          ghcr.io/${{ github.repository }}:latest
-          ghcr.io/${{ github.repository }}:${{ github.sha }}
+          ghcr.io/adrienstoock/tp3_devops:latest
+          ghcr.io/adrienstoock/tp3_devops:${{ github.sha }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
     
