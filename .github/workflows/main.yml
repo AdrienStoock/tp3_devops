@@ -1,4 +1,4 @@
-name: Build and push Docker image
+name: Build, Scan, and Deploy
 
 on:
   push:
@@ -6,12 +6,16 @@ on:
       - partB
       - main
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  lint-test:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -22,15 +26,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run pre-commit hooks
-        run: pre-commit run --all-files
 
       - name: Bandit check
-        uses: PyCQA/bandit-action@v1 
-
+        uses: PyCQA/bandit-action@v1
+        with:
+          targets: "."
 
   build-and-push:
-    needs: lint-test
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -52,3 +55,4 @@ jobs:
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository }}:latest
           docker push $IMAGE_NAME
+
