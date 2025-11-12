@@ -64,7 +64,4 @@ jobs:
         shell: bash
       
       - name: Trigger Coolify webhook
-        run: curl -X POST ${{ secrets.COOLIFY_TOKEN }
-
-
-}
+        run: curl -X POST ${{ secrets.COOLIFY_TOKEN }}
