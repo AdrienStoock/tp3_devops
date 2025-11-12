@@ -62,4 +62,6 @@ jobs:
           IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}:latest"
           docker push "$IMAGE_NAME"
         shell: bash
-
+      
+      - name: Trigger Coolify webhook
+        run: curl -X POST ${{ secrets.COOLIFY_WEBHOOK_URL }}
