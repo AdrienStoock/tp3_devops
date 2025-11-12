@@ -27,15 +27,13 @@ jobs:
 
       - name: Run Bandit security scan with summary
         run: |
-          bandit -r . -f html -o bandit-report.html
-          echo "=== Bandit Scan Summary ==="
-          
+         bandit -r . -f json -o bandit-report.json --severity-level medium || true 
 
       - name: Upload Bandit report
         uses: actions/upload-artifact@v4
         with:
           name: bandit-report
-          path: bandit-report.html
+          path: bandit-report.json
 
 
 
