@@ -1,46 +1,16 @@
-name: Build and push Docker image
+FROM python:3.13
+WORKDIR .
 
-on:
-  push:
-    branches:
-      - main
+# Install the application dependencies
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-jobs:
-  lint-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+# Copy in the source code
+COPY . .
+EXPOSE 8080
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+# Setup an app user so the container doesn't run as the root user
+RUN useradd app
+USER app
 
-      - name: Run pre-commit hooks
-        run: pre-commit run --all-files
-
-      - name: Run pyright
-        run: pyright
-
-  build_and_push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
+CMD ["python3", "app.py", "--host", "0.0.0.0", "--port", "8080"]
