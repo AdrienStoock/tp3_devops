@@ -6,10 +6,6 @@ on:
       - partB
       - main
 
-permissions:
-  contents: read
-  packages: write
-  security-events: write 
 
 
 jobs:
@@ -34,7 +30,7 @@ jobs:
           bandit -r . -f html -o bandit-report.html
           bandit -r . -f txt -o bandit-summary.txt
           echo "=== Bandit Scan Summary ==="
-          cat bandit-summary.txt || echo "No issues found"
+          cat bandit-summary.txt || echo "No issues found" || true 
 
       - name: Upload Bandit report
         uses: actions/upload-artifact@v4
